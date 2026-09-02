@@ -29,6 +29,9 @@ class DbTable{
     Uint8List bytes = record.readAsBytesSync();
     try{
       Map<String,dynamic> parsedBSON = BsonCodec.deserialize(BsonBinary.from(bytes));
+      parsedBSON.addAll({
+        "uuid": uuid,
+      });
       return parsedBSON;
     }catch(error){
       return {};
@@ -57,8 +60,10 @@ class DbTable{
       try{
         if(folderContents[i] is File && folderContents[i].path.endsWith(".bson")){
           File record = folderContents[i] as File;
-          Uint8List bytes = record.readAsBytesSync();
-          Map<String,dynamic> parsedBSON = BsonCodec.deserialize(BsonBinary.from(bytes));
+          //Parse and insert the uuid
+          String uuidAsString = record.path.substring(record.path.lastIndexOf("/|\\"),record.path.lastIndexOf(".bson"));
+          int uuid = int.parse(uuidAsString);
+          Map<String,dynamic> parsedBSON = view(uuid);
           onRecord(parsedBSON);
         }
       }catch(err){
