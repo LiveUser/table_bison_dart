@@ -1,6 +1,6 @@
 name: table_bison
 description: A BSON based data storage system.
-version: 1.0.0
+version: 0.0.5
 # repository: https://github.com/my_org/my_repo
 
 environment:
